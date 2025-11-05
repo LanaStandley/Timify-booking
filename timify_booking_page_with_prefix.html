@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book with Lana</title>
+  <style>
+    #timify-book-button {
+      background-color: #0073e6;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #timify-book-button:hover {
+      background-color: #005bb5;
+    }
+  </style>
+</head>
+<body>
+  <h1>Book Your Appointment</h1>
+  <p>Click the button below to schedule your booking. A unique reference will be generated automatically.</p>
+  <button id="timify-book-button" class="timify-button">Book Now</button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const fieldId = '690b5e13f227fa529cb3c72b'; // Your Booking Reference field ID
+      const accountId = '68f8e12139374d986e263cb2'; // Your TIMIFY Account ID
+
+      // Generate a booking reference with BK- prefix
+      const bookingRef = 'BK-' + Math.floor(100000 + Math.random() * 900000);
+
+      // Set the booking reference into the widget attribute
+      const btn = document.getElementById('timify-book-button');
+      btn.setAttribute('data-customer-field-1', `${fieldId}-${bookingRef}`);
+
+      // Load the TIMIFY widget script
+      const script = document.createElement('script');
+      script.src = '//book.timify.com/widget/widget.min.js';
+      script.setAttribute('data-account-id', accountId);
+      script.setAttribute('data-position', 'flexible');
+      document.body.appendChild(script);
+    });
+  </script>
+</body>
+</html>
