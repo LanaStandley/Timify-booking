@@ -3,21 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <title>Book with GXO</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; padding: 24px; max-width: 760px; }
+    .url-box { display:flex; gap:8px; margin-top:12px; align-items:center; }
+    .url-input { flex:1; padding:8px; font-family:monospace; }
+    .small { font-size:0.9rem; color:#555; margin-top:6px; }
+  </style>
   <script>
-    function generateBookingLink() {
+    function generateBookingLink({autoOpen=true} = {}) {
       const baseUrl = "https://book.timify.com/services";
       const accountId = "68f8e12139374d986e263cb2";
       const fieldName = "customerField690b5e13f227fa529cb3c72b";
       const uniqueCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+
+      // build and URL-encode the query string
       const fullUrl = `${baseUrl}?accountId=${encodeURIComponent(accountId)}&hideCloseButton=true&${encodeURIComponent(fieldName)}=${encodeURIComponent(uniqueCode)}`;
-      window.open(fullUrl, "_blank");
+
+      // show the URL on the page for debugging
+      const urlInput = document.getElementById('generatedUrl');
+      const urlLink = document.getElementById('openLink');
+      urlInput.value = fullUrl;
+      urlLink.href = fullUrl;
+      urlLink.textContent = 'Open generated URL in new tab';
+
+      // log for console debugging
+      console.log('[Timify debug] Generated URL:', fullUrl);
+
+      // store last generated url for reference
+      window.__lastTimifyUrl = fullUrl;
+
+      if (autoOpen) {
+        window.open(fullUrl, "_blank");
+      }
+    }
+
+    // helper to copy the generated URL to clipboard
+    async function copyUrl() {
+      const url = document.getElementById('generatedUrl').value;
+      if (!url) return alert('No URL generated yet.');
+      try {
+        await navigator.clipboard.writeText(url);
+        alert('Copied URL to clipboard');
+      } catch (e) {
+        alert('Copy failed — select and copy manually');
+      }
+    }
+
+    // show the last generated URL in an alert (quick debug)
+    function showLastUrlAlert() {
+      if (window.__lastTimifyUrl) {
+        alert(window.__lastTimifyUrl);
+      } else {
+        alert('No URL generated yet.');
+      }
     }
   </script>
 </head>
 <body>
   <h1>Book with GXO</h1>
   <h2>Book Your Appointment</h2>
-  <p>Click the button below to schedule your booking. A unique reference will be generated automatically.</p>
-  <button onclick="generateBookingLink()">Book Now</button>
+  <p>Click the button below to schedule your booking. A unique reference will be generated automatically and the exact booking URL will be shown so you can copy or inspect it.</p>
+
+  <div>
+    <button onclick="generateBookingLink({autoOpen:true})">Book Now (open in new tab)</button>
+    <button onclick="generateBookingLink({autoOpen:false})" style="margin-left:8px">Generate URL (don't open)</button>
+    <button onclick="showLastUrlAlert()" style="margin-left:8px">Show last URL (alert)</button>
+  </div>
+
+  <div class="url-box">
+    <input id="generatedUrl" class="url-input" type="text" readonly placeholder="Generated Timify URL will appear here" />
+    <button onclick="copyUrl()">Copy</button>
+    <a id="openLink" class="small" href="#" target="_blank" rel="noopener noreferrer" style="margin-left:8px"></a>
+  </div>
+
+  <p class="small">Notes: The URL is logged to the console (open DevTools → Console) and stored on window.__lastTimifyUrl for quick inspection. Use "Generate URL (don't open)" if you want to copy/paste the URL manually or test it in a separate tab.</p>
 </body>
 </html>
