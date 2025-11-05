@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book with Lana</title>
+  <script src="https://widget.timify.com/js/widget.js"></script>
+</head>
+<body>
+  <h1>Book with Lana</h1>
+  <h2>Book Your Appointment</h2>
+  <p>Click the button below to schedule your booking. A unique reference will be generated automatically.</p>
+
+  <!-- Timify Overlay Button -->
+  <button
+    class="timify-widget-overlay"
+    data-account-id="68f8e12139374d986e263cb2"
+    data-hide-close-button="true"
+    data-lang="en"
+    onclick="generateUniqueRef()">
+    Book Now
+  </button>
+
+  <script>
+    function generateUniqueRef() {
+      const uniqueCode = Math.random().toString(36).substring(2, 10).toUpperCase();
+      const widgetButton = document.querySelector('.timify-widget-overlay');
+      widgetButton.setAttribute('data-ref', uniqueCode);
+    }
+  </script>
+</body>
+</html>
