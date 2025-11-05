@@ -1,15 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Book with GXO</title>
   <script>
     function generateBookingLink() {
       const baseUrl = "https://book.timify.com/services";
       const accountId = "68f8e12139374d986e263cb2";
+      const fieldName = "customerField690b5e13f227fa529cb3c72b";
       const uniqueCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-      const fullUrl = `${baseUrl}?accountId=${accountId}&hideCloseButton=true&ref=${uniqueCode}`;
+      const fullUrl = `${baseUrl}?accountId=${encodeURIComponent(accountId)}&hideCloseButton=true&${encodeURIComponent(fieldName)}=${encodeURIComponent(uniqueCode)}`;
       window.open(fullUrl, "_blank");
     }
   </script>
